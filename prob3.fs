@@ -1,12 +1,15 @@
 #light 
 
-let countVowels inputString = countVowelsTupled (0,0,0,0,0) inputString.ToCharArray()
+let countVowels inputString = inputString.ToCharArray() |> Array.map createTuple |> Array.fold addTuples (0,0,0,0,0)
 
-let countVowelsTupled (aCount, eCount, iCount, oCount, uCount) charArray =
-	match charArray with
-	| 'a' :: tail -> countVowelsTupled (aCount + 1, eCount, iCount, oCount, uCount) tail
-	| 'e' :: tail -> countVowelsTupled (aCount, eCount + 1, iCount, oCount, uCount) tail
-	| 'i' :: tail -> countVowelsTupled (aCount, eCount, iCount + 1, oCount, uCount) tail
-	| 'o' :: tail -> countVowelsTupled (aCount, eCount, iCount, oCount + 1, uCount) tail
-	| 'u' :: tail -> countVowelsTupled (aCount, eCount, iCount, oCount, uCount + 1) tail
-	| _ :: tail -> countVowelsTupled (aCount, eCount, iCount, oCount, uCount) tail
+let createTuple inChar = 
+	match inChar with
+	| 'a' -> (1,0,0,0,0)
+	| 'e' -> (0,1,0,0,0)
+	| 'i' -> (0,0,1,0,0)
+	| 'o' -> (0,0,0,1,0)
+	| 'u' -> (0,0,0,0,1)
+	| _ -> (0,0,0,0,0)
+
+let addTuples (accACount, accECount, accICount, accOCount, accUCount) (aCount, eCount, iCount, oCount, uCount) = (accACount + aCount, accECount + eCount, accICount + iCount, accOCount + oCount, accUCount + uCount)
+
